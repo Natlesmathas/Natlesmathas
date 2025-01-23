@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Clicker de Natlesmathas</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #c2e6ed;
+        color: #333;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background-color: #3ac299;
+        padding: 20px;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 50px;
+      }
+      #cookie {
+        width: 150px;
+        height: 150px;
+        background-image: url("https://assets.onecompiler.app/4337xvkk9/436wznsj5/poulet%20ape%20kill.png"); /* Image de cookie */
+        background-size: cover;
+
+        cursor: pointer;
+
+        transition: transform 0.2s ease-in-out;
+      }
+      #cookie:hover {
+        transform: scale(1.1);
+      }
+      .score {
+        font-size: 30px;
+        margin-top: 20px;
+      }
+      .shop {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .shop-item {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      .shop-item img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 10px;
+      }
+      .shop-item button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .shop-item button:hover {
+        background-color: #45a049;
+      }
+      .shop-item span {
+        display: block;
+        margin-top: 10px;
+        font-size: 18px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">Cookie Clicker de Natlesmathas</div>
+
+    <div class="container">
+      <div id="cookie"></div>
+      <div class="score">
+        <p>Cookies : <span id="cookieCount">0</span></p>
+      </div>
+
+      <!-- Magasin -->
+      <div class="shop">
+        <div class="shop-item">
+          <img
+            src="https://git-scm.com/images/logos/logomark-orange@2x.png"
+            alt="Amélioration 1"
+          />
+          <button id="buyUpgrade1">Acheter +1 cookie par clic</button>
+          <span id="priceUpgrade1">Coût : 50 cookies</span>
+        </div>
+        <div class="shop-item">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/c/c2/GitHub_Invertocat_Logo.svg"
+            alt="Amélioration 2"
+          />
+          <button id="buyUpgrade2">Acheter +5 cookies par clic</button>
+          <span id="priceUpgrade2">Coût : 250 cookies</span>
+        </div>
+        <div class="shop-item">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg"
+            alt="Amélioration 3"
+          />
+          <button id="buyUpgrade3">Acheter +10 cookies par clic</button>
+          <span id="priceUpgrade3">Coût : 500 cookies</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Variables de base
+      function GetCookieCount() {
+        return localStorage.getItem("cookies") ?? 0
+      }
+      function addToCookieCount(value) {
+        localStorage.setItem('cookies', GetCookieCount())
+      }
+        // let cookieCount = 0;
+      let cookiesPerClick = 1;
+      let upgrade1Price = 50;
+      let upgrade2Price = 250;
+      let upgrade3Price = 500;
+
+      // Récupérer les éléments du DOM
+      const cookieElement = document.getElementById("cookie");
+      const cookieCountElement = document.getElementById("cookieCount");
+      const buyUpgrade1 = document.getElementById("buyUpgrade1");
+      const buyUpgrade2 = document.getElementById("buyUpgrade2");
+      const buyUpgrade3 = document.getElementById("buyUpgrade3");
+      const priceUpgrade1 = document.getElementById("priceUpgrade1");
+      const priceUpgrade2 = document.getElementById("priceUpgrade2");
+      const priceUpgrade3 = document.getElementById("priceUpgrade3");
+
+      // Fonction pour ajouter des cookies au clic
+      cookieElement.addEventListener("click", function () {
+        localStorage.setItem(
+          "cookies",
+          localStorage.getItem("cookies") ?? 0 + cookiesPerClick
+        );
+        // cookieCount += cookiesPerClick;
+        cookieCountElement.textContent = cookieCount;
+      });
+
+      // Acheter les améliorations
+      buyUpgrade1.addEventListener("click", function () {
+        if (cookieCount >= upgrade1Price) {
+          cookieCount -= upgrade1Price;
+          cookiesPerClick += 1;
+          cookieCountElement.textContent = cookieCount;
+          upgrade1Price = Math.floor(upgrade1Price * 1.5); // Augmente le prix après achat
+          priceUpgrade1.textContent = `Coût : ${upgrade1Price} cookies`;
+        }
+      });
+
+      buyUpgrade2.addEventListener("click", function () {
+        if (cookieCount >= upgrade2Price) {
+          localStorage.setItem(
+            "cookies",
+            localStorage.getItem("cookies") ?? 0 - upgrade2Price
+          );
+          cookiesPerClick += 5;
+          cookieCountElement.textContent = cookieCount;
+          upgrade2Price = Math.floor(upgrade2Price * 1.5); // Augmente le prix après achat
+          priceUpgrade2.textContent = `Coût : ${upgrade2Price} cookies`;
+        }
+      });
+
+      buyUpgrade3.addEventListener("click", function () {
+        if (cookieCount >= upgrade3Price) {
+          localStorage.setItem(
+            "cookies",
+            localStorage.getItem("cookies") ?? 0 - upgrade3Price
+          );
+          cookiesPerClick += 10;
+          cookieCountElement.textContent = cookieCount;
+          upgrade3Price = Math.floor(upgrade3Price * 1.5); // Augmente le prix après achat
+          priceUpgrade3.textContent = `Coût : ${upgrade3Price} cookies`;
+        }
+      });
+    </script>
+  </body>
+</html>
